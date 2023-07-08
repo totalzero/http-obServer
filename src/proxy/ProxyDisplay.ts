@@ -7,6 +7,9 @@ interface DisplayInterface {
 headers: IncomingHttpHeaders;    
 }
 
+/**
+ * a class thad control sending information about requests and responses to console
+ */
 export default class ProxyDisplay {
 
 private _logLevel: number;
@@ -16,11 +19,17 @@ private _res: DisplayInterface | undefined;
 constructor() {
     this._logLevel = 0;
 }
-
+/**
+ * determines a level of information. 
+ * @param {number} level - digit values between 0 and 3 
+ */
 setLogLevel(level: 0 | 1| 2| 3) {
     this._logLevel = level;
 }
-
+/**
+ * this method sending information about request to console
+ * @param req {DisplayInterface} - request from server
+ */
 displayRequest(req: DisplayInterface) {
 this._req = req;
     switch (this._logLevel) {
@@ -43,7 +52,10 @@ this._req = req;
         }
         
 }
-
+/**
+ *  this method sending information about response to console
+ * @param res {DisplayInterface} - response from http.request
+ */
 displayResponse(res: DisplayInterface) {
     this._res = res;
 if (this._res) {
