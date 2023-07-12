@@ -1,3 +1,4 @@
-import Server from "./proxy/ProxyServer";
+import { startCMD } from "./cmd/CommandLine";
 
-const proxy = new Server(4000);
+startCMD();
+

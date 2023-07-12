@@ -2,10 +2,10 @@
   "name": "http-observer",
   "version": "1.0.0",
   "description": "simple http proxy server - observing http requests, responsens and modyfying it",
-  "main": "lib/main.js",
+  "main": "./lib/src/main.js",
   "scripts": {
     "test": "tsc && jest --verbose ./lib/tests",
-    "start": "tsc && node ./lib/main.js",
+    "start": "tsc && node ./lib/src/main.js",
     "compile": "tsc -p tsconfigbuild.json"
   },
   "keywords": [
