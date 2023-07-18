@@ -1,3 +1,4 @@
+import error from "./common/errorCmd";
 import help from "./common/helpCmd";
 import start from "./common/startCmd";
 import proxyEvents from "./events";
@@ -22,18 +23,13 @@ function runCommand(cmd: string[]) {
 proxyEvents.emit('start', cmd);
  break;
     default:
-        proxyEvents.emit('error');
+        proxyEvents.emit('error', "unknown command");
         break;
  }   
 }
 
-proxyEvents.on("help", () => {
-  help()  
-})
-proxyEvents.on('error', () => {
-    console.log("error parsing comend or arguments ")
-})
-
+proxyEvents.on("help",help);
+proxyEvents.on('error', error);
 proxyEvents.on('start', (cmd: string[]) => {
-    start(cmd);
-})
+start(cmd);
+});

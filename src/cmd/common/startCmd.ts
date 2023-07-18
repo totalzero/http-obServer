@@ -11,9 +11,9 @@ if (!isNaN((arg as unknown) as number)) {
         `);
     });
 } else {
-    proxyEvents.emit('error');
+    proxyEvents.emit('error', "server has been started. If you want a change port, close the currently running server");
 }
 } else {
-    proxyEvents.emit('error');
+    proxyEvents.emit('error', "wrong port number");
 }
 }
