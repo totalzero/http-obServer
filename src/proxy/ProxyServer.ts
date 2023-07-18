@@ -5,26 +5,26 @@
 import http from "http"
 import { URL, urlToHttpOptions } from "url"
 import ProxyDisplay from "./ProxyDisplay";
-
 import requestListener from "./serverRequest";
 
 export default class Server {
-    private static _server?: Server
+    private static _instance: Server
 private _server: http.Server
 private _display: ProxyDisplay;
 
-constructor(port: number) {
+constructor(port: number, listenerCallBack?: Function) {
     this._display = new ProxyDisplay();
+    Server._instance = this;
 this._server = http.createServer((req, res) => {
     requestListener(req, res, this._display);
 }).listen(port, () => {
-        console.log(`server listening on port: ${port}`);
-    });
-Server._server = this;
+    listenerCallBack?.();
+});
 }
 static get(): Server | undefined {
-    return Server._server
+    return Server._instance;
 }
+
 setLogLevel(level: 1 | 2| 3) {
 this._display.setLogLevel(level);
 }

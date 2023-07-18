@@ -1,16 +1,19 @@
 import Server from "../../proxy/ProxyServer";
-import { ResultMessage } from "../CommandLine";
+import proxyEvents from "../events"
 
-export default function start(cmd: string[]): ResultMessage {
- if ((cmd[0] == "start") && (typeof Number(cmd[1]) == "number")) {
-if (Server.get()) {
-    return {error: "server is running now"}
+export default function start(cmd: string[]) {
+const [command, arg] = cmd
+if (!isNaN((arg as unknown) as number)) {
+    if (!Server.get()) {
+    new Server(Number(arg), () => {
+        console.log(`
+        server starting on port: ${arg}
+        `);
+    });
 } else {
-    new Server(Number(cmd[1]))
-return {
-    message: `server start on port: ${cmd[1]}`
+    proxyEvents.emit('error');
 }
+} else {
+    proxyEvents.emit('error');
 }
- }   
-return {error:"start: bad arguments"}
 }

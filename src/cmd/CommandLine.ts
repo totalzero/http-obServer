@@ -1,5 +1,7 @@
 import help from "./common/helpCmd";
 import start from "./common/startCmd";
+import proxyEvents from "./events";
+
 
 export function startCMD() {
     console.log(`
@@ -12,25 +14,26 @@ export function startCMD() {
 }
 
 function runCommand(cmd: string[]) {
-const writeToConsole = (message: ResultMessage) => {
-message?.message ? console.log(message.message) : console.error(message.error)
-}
-
-switch (cmd[0]) {
-    case "help":
-        writeToConsole(help())
+ switch (cmd[0]) {
+    case "help" || "?":
+        proxyEvents.emit("help");
         break;
-case "start":
-start(cmd);
-break;
+ case "start":
+proxyEvents.emit('start', cmd);
+ break;
     default:
-        console.log("unknown command");
+        proxyEvents.emit('error');
         break;
+ }   
 }
 
-}
+proxyEvents.on("help", () => {
+  help()  
+})
+proxyEvents.on('error', () => {
+    console.log("error parsing comend or arguments ")
+})
 
-export interface ResultMessage {
-    message?: string;
-    error?: string;
-}
+proxyEvents.on('start', (cmd: string[]) => {
+    start(cmd);
+})

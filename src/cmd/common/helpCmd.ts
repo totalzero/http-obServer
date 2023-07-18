@@ -1,13 +1,9 @@
-import { ResultMessage } from "../CommandLine";
-
-export default function help(): ResultMessage {
-    const message = `
- start [number] when [number]    is a port for proxy
- example 
- start 1234 
- 
-    `
-    return {
-        message: message
-    }
+export default function help() {
+    console.log(`
+    ObServer - simple http server to watching and writing http requests and responses
+    ---
+start [port] -> run proxy on port [port]
+example:
+start 1234
+    `);
 }
