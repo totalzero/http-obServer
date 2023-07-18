@@ -1,8 +1,10 @@
 import Server from "../../proxy/ProxyServer";
 import proxyEvents from "../events"
-
-export default function start(cmd: string[]) {
-const [command, arg] = cmd
+/**
+ * this function starting proxy server with give parameters
+ * @param arg { number } -> number of proxy server port
+ */
+export default function start(arg: string) {
 if (!isNaN((arg as unknown) as number)) {
     if (!Server.get()) {
     new Server(Number(arg), () => {

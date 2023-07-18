@@ -1,4 +1,6 @@
+import close from "./common/closeCmd";
 import error from "./common/errorCmd";
+import exit from "./common/exitCmd";
 import help from "./common/helpCmd";
 import start from "./common/startCmd";
 import proxyEvents from "./events";
@@ -20,7 +22,14 @@ function runCommand(cmd: string[]) {
         proxyEvents.emit("help");
         break;
  case "start":
-proxyEvents.emit('start', cmd);
+    const [command, arg] = cmd
+proxyEvents.emit('start', arg);
+ break;
+ case "close":
+proxyEvents.emit('close');
+ break;
+ case "exit":
+proxyEvents.emit('exit');
  break;
     default:
         proxyEvents.emit('error', "unknown command");
@@ -30,6 +39,8 @@ proxyEvents.emit('start', cmd);
 
 proxyEvents.on("help",help);
 proxyEvents.on('error', error);
-proxyEvents.on('start', (cmd: string[]) => {
+proxyEvents.on('start', (cmd: string) => {
 start(cmd);
 });
+proxyEvents.on('close', close);
+proxyEvents.on('exit', exit);

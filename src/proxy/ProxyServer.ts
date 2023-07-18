@@ -8,7 +8,7 @@ import ProxyDisplay from "./ProxyDisplay";
 import requestListener from "./serverRequest";
 
 export default class Server {
-    private static _instance: Server
+    private static _instance?: Server
 private _server: http.Server
 private _display: ProxyDisplay;
 
@@ -28,4 +28,10 @@ static get(): Server | undefined {
 setLogLevel(level: 1 | 2| 3) {
 this._display.setLogLevel(level);
 }
+
+close(callBack?: (err: Error | undefined) => void) {
+    this._server.close(callBack);
+    Server._instance = undefined;
+}
+
 }
