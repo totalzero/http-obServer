@@ -1,6 +1,6 @@
 import { IncomingMessage } from "http";
 
-interface HttpStorage {
+export interface HttpStorage {
  requests?: IncomingMessage[];
  responses?: IncomingMessage[];
 }

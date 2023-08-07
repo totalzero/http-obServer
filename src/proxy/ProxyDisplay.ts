@@ -17,7 +17,7 @@ private _req: DisplayInterface | undefined;
 private _res: DisplayInterface | undefined;
 
 constructor() {
-    this._logLevel = 0;
+    this._logLevel = 1;
 }
 /**
  * determines a level of information. 
