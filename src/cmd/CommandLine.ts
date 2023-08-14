@@ -62,6 +62,7 @@ start(cmd);
 proxyEvents.on('close', close);
 proxyEvents.on('exit', exit);
 proxyEvents.on('loglevel', (level: number) => {
+    
 if ((level < 1) || (level > 3)) {
 proxyEvents.emit('error', "bad display level value");
 } else {

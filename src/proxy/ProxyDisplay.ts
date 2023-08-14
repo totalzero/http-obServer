@@ -23,8 +23,8 @@ constructor() {
  * determines a level of information. 
  * @param {number} level - digit values between 0 and 3 
  */
-setLogLevel(level: 0 | 1| 2| 3) {
-    this._logLevel = level;
+setLogLevel(level: number) {
+    this._logLevel = Number(level);
 }
 /**
  * this method sending information about request to console
@@ -48,6 +48,7 @@ this._req = req;
             this.gettingRequest();
         break;
             default:
+                console.log("unknown log level");
                 break;
         }
         
@@ -73,6 +74,7 @@ case 3:
 this.resHeaders();    
 break;
 default:
+    console.log("unknown log level");
         break;
 }
 }
@@ -101,7 +103,7 @@ private gettingRequest = () => {
 private host() {
 if (this._req){
     console.log(`
-    from: ${this._req.url}
+    from: ${this._req.headers['host']}
     statusCode: ${this._req.statusCode}
     statusMessage: ${this._req.statusMessage}
     `.trim())

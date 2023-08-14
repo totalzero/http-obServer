@@ -13,12 +13,13 @@ showRequests();
         break;
  case "request":
 if (whichReq) {
-    showOneRequest(whichReq);
+    showOneRequest(Number(whichReq));
 } else {
     proxyEvents.emit("error", "")
 }
  break;
     default:
+        console.log("i dont know what i am showing");
         break;
  }   
 }
@@ -33,9 +34,9 @@ requests.forEach((req, index) => {
  }
 
 function showOneRequest(position: number) {
-    const requests = getSelectedRequest()?.requests;   
-    const responses = getSelectedRequest()?.responses;
-    if (requests && responses) {
+    const requests = getSelectedRequest()!.requests;   
+    const responses = getSelectedRequest()!.responses;
+    //if (requests  responses) {
         const req = requests[position];
         const res = responses[position];
         req.setEncoding("utf-8");
@@ -54,5 +55,7 @@ function showOneRequest(position: number) {
     console.log(res.toString());
  }
  }
-    }
+    //} else {
+        //console.log("jakis blad");
+    //}
 }
