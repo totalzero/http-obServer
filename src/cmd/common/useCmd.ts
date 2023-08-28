@@ -9,6 +9,7 @@ selectedRequest = getByHost(host as string);
     } else {
         selectedRequest = getByHost(hosts[host as number]);
     }
+    console.log(`ok`)
 }
 
 export function getSelectedRequest(): HttpStorage | undefined {

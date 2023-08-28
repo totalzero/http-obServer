@@ -12,6 +12,8 @@ console.error("error from saving request in storage");
     }
     const options = urlToHttpOptions(new URL(serverRequest.url!));
         const clientRequest = request(options, (clientResponse) => {
+            clientResponse.url = serverRequest.url
+            clientResponse.headers['host'] = serverRequest.headers['host'];
             if (! saveResponseInStorage(clientResponse)) {
 console.error("wrong from saving response in storage");
             }

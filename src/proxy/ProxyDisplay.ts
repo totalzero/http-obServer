@@ -82,7 +82,7 @@ default:
 
 private resCode() {
     console.log(`statusCode: ${this._res?.statusCode}
-    from: ${this._res?.url}
+    from: ${this._res?.headers['host']}
     statusMessage: ${this._res?.statusMessage}`.trim())
 }
 

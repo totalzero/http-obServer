@@ -13,16 +13,16 @@ if (reqstorage) {
     reqstorage?.requests?.push(req);
     return true;
 } else {
-    storage.set(req.headers["host"]!, {requests: [req]});
+    storage.set(req.headers["host"]!, {requests: [req], responses: []});
     return true;
 }
 return false;
 }
 
 export function saveResponseInStorage(res: IncomingMessage): boolean {
-    const resStorage = storage.get(res.headers["host"]!);
+const resStorage = storage.get(res.headers["host"]!);
     if (resStorage) {
-        resStorage?.responses?.push(res)
+        resStorage?.responses?.push(res);
         return true;
     } else {
         storage.set(res.headers["host"]!, {responses: [res]})

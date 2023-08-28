@@ -1,10 +1,12 @@
+import { IncomingMessage } from "http";
 import proxyEvents from "../events";
 import { getSelectedRequest } from "./useCmd";
 
 /*
-jezeli parametr = requests to wyswietl wszystkie zapytania do servera.
-jezeli parametr bedzie response a drugi argument bedzie mial wartosc number to 
-wyswietl request[number] a nastepnie response dla tego requesta
+show requests - wyswietla wszystkie requesty
+show responses - wyswietla wszystkie responses
+show request [ktory] wyswietla wybrany request
+show response [ktory] wyswietla wybrany response
 */
 export default function show(req: string, whichReq?: number) {
  switch (req) {
@@ -12,50 +14,95 @@ export default function show(req: string, whichReq?: number) {
 showRequests();        
         break;
  case "request":
-if (whichReq) {
-    showOneRequest(Number(whichReq));
-} else {
-    proxyEvents.emit("error", "")
-}
+showRequest(whichReq);
+ break;
+ case "responses":
+showResponses();
+ break;
+ case "response":
+showResponse(whichReq);
  break;
     default:
-        console.log("i dont know what i am showing");
+        proxyEvents.emit('error', "error from show: bad arguments of " + req);
         break;
  }   
 }
 
 function showRequests() {
- const requests = getSelectedRequest()?.requests;
+    const requests = getSelectedRequest()?.requests
+ let result = ''
  if (requests) {
-requests.forEach((req, index) => {
-    console.log(`${index}: ${req.url}`);
-}) 
- }
+requests.forEach((value, index) => {
+    result += index + ": " + value.url + '\n'
+})
+ } else {
+    result = 'nothink requests';
  }
 
-function showOneRequest(position: number) {
-    const requests = getSelectedRequest()!.requests;   
-    const responses = getSelectedRequest()!.responses;
-    //if (requests  responses) {
-        const req = requests[position];
-        const res = responses[position];
-        req.setEncoding("utf-8");
-        res.setEncoding("utf-8");
- console.log("Request:");
- console.log(`
- ${req.method} ${req.url} HTTP/${req.httpVersion}
- `);       
- for (let header in req.headers) {
-    console.log(`${header}: ${req.headers[header]}`);
-    console.log(req.toString());
-    console.log("Response:");
-    console.log(`HTTP/${res.httpVersion} ${res.statusCode} ${res.statusMessage}`);
- for (let header in res.headers) {
-    console.log(`${header}: ${res.headers[header]}`);
-    console.log(res.toString());
+ console.log(result);
+}
+
+function showRequest(reqPosition?: number) {
+    const requests = getSelectedRequest()?.requests
+    let result =''
+if (!reqPosition) {
+    proxyEvents.emit('error', "error from show request: wrong position argument");
+    return ;
+}
+
+if (requests) {
+const req = requests[reqPosition];
+result = `
+${req.method} ${req.url} HTTP/${req.httpVersion}
+
+`
+for (let header in req.headers) {
+    result += `${header}: ${req.headers[header]}
+    `
+}
+req.setEncoding('utf-8');
+result += '\n' +  req.toString();
+} else {
+    result = 'nothink selected request';
+}
+
+console.log(result);
+}
+
+function showResponses() {
+const responses = getSelectedRequest()?.responses;
+let result = '';
+
+if (responses) {
+responses.forEach((value, index) => {
+    result += index + ": " + value.url + '\n';
+})
+} else {
+result = "nothink responses";
+}
+
+console.log(result);
+}
+
+function showResponse(resPosition?: number) {
+    const responses = getSelectedRequest()?.responses;
+    let result = '';
+    if (!resPosition) {
+        proxyEvents.emit('error', "error from show response: wrong position argument");
+        return ;
+    }
+
+ if (responses) {
+const res = responses[resPosition];
+result += `HTTP/${res.httpVersion} ${res.statusCode} ${res.statusMessage} \n`;
+for (let header in res.headers) {
+    result += `${header}: ${res.headers[header]} \n`;
+}
+res.setEncoding('utf-8');
+result += res.toString();
+
+ }    else {
+result += "nothink selected response";
  }
- }
-    //} else {
-        //console.log("jakis blad");
-    //}
+ console.log(result);
 }
