@@ -8,6 +8,12 @@ export interface HttpStorage {
 const storage: Map<string, HttpStorage> = new Map<string, HttpStorage>();
 
 export function saveRequestInStorage(req: IncomingMessage): boolean {
+req.on('data', (text) => {
+    req.toString = (): string => {
+return text;
+    }
+});
+
 const reqstorage = storage.get(req.headers["host"]!);
 if (reqstorage) {
     reqstorage?.requests?.push(req);
@@ -20,6 +26,12 @@ return false;
 }
 
 export function saveResponseInStorage(res: IncomingMessage): boolean {
+    res.on('data', (text) => {
+res.toString = () => {
+return text;
+}
+    });
+
 const resStorage = storage.get(res.headers["host"]!);
     if (resStorage) {
         resStorage?.responses?.push(res);
