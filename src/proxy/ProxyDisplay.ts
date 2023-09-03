@@ -1,4 +1,5 @@
 import { IncomingHttpHeaders, IncomingMessage, ServerResponse } from "http";
+import proxyEvents from "../cmd/events";
 
 interface DisplayInterface {
     url?: string,
@@ -34,21 +35,20 @@ displayRequest(req: DisplayInterface) {
 this._req = req;
     switch (this._logLevel) {
         case 3:
-        this.gettingRequest();
-        this.host();
-        this.headers();
+        this.to();
+        this.requestLine();
+        this.displayHeaders(this._req);
         break;
         
         case 2:
-            this.gettingRequest();
-            this.host();
-            
+this.to();
+this.requestLine();
         break;
         case 1:
-            this.gettingRequest();
+            this.to();
         break;
             default:
-                console.log("unknown log level");
+                proxyEvents.emit('error', "unknown log level");
                 break;
         }
         
@@ -62,61 +62,52 @@ displayResponse(res: DisplayInterface) {
 if (this._res) {
 switch (this._logLevel) {
 case 1:
-this.gettingResponse();
+this.from();
 break;
 case 2:
-this.gettingResponse();
-this.resCode();
+this.from();
+this.responseLine();
 break;
 case 3:
-    this.gettingResponse();
-    this.resCode();
-this.resHeaders();    
+    this.from();
+    this.responseLine();
+this.displayHeaders(this._res);
 break;
 default:
-    console.log("unknown log level");
+    proxyEvents.emit('error', "unknown log level");
         break;
 }
 }
 }
 
-private resCode() {
-    console.log(`statusCode: ${this._res?.statusCode}
-    from: ${this._res?.headers['host']}
-    statusMessage: ${this._res?.statusMessage}`.trim())
+private to() {
+    console.log(`to: ${this._req?.headers['host']}`);
 }
 
-private resHeaders() {
-    for (let header in this._res?.headers) {
-        console.log(`${header}: ${this._res?.headers[header]}`);
+private from() {
+    console.log(`from: ${this._res?.headers['host']}`);
+}
+
+private requestLine() {
+    const rq = this._req as IncomingMessage;
+    const method = rq.method;
+    const http = rq.httpVersion;
+    const path = rq.url;
+console.log(`${method} ${path} HTTP/${http}`);
+}
+
+private responseLine() {
+    const rs = this._res as IncomingMessage;
+    const http = rs.httpVersion;
+    const statusCode = rs.statusCode;
+    const statusMessage = rs.statusMessage;
+    console.log(`HTTP/${http} ${statusCode} ${statusMessage}`);
+}
+
+private displayHeaders(rqs: DisplayInterface) {
+    for (let header in rqs.headers) {
+        console.log(`${header}: ${rqs.headers[header]}`);
     }
 }
-
-private gettingResponse() {
-    console.log("sending response");
-}
-
-private gettingRequest = () => {
-    console.log("request received");
-}
-
-private host() {
-if (this._req){
-    console.log(`
-    from: ${this._req.headers['host']}
-    statusCode: ${this._req.statusCode}
-    statusMessage: ${this._req.statusMessage}
-    `.trim())
-}
-}
-
-private headers() {
-     if (this._req) {
-    for (let header in this._req.headers) {
-        console.log(`${header}: ${this._req.headers[header]}`);
-    }
-}
-}
-
 
 }
