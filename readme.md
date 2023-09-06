@@ -1,7 +1,8 @@
-export default function help() {
-    console.log(`
-    ObServer - simple http server to watching and writing http requests and responses
-    ---
+obServer - small proxy http server to watching http traffic
+note: currently support only http/1.1
+note: currently does not support editing http requests and responses
+
+how to use
 start [port] -> run proxy on port [port]
 example:
 start 1234
@@ -27,5 +28,4 @@ example:
 show response 1
 exit -> close application
 close -> close proxy server without exiting 
-    `);
-}
+    
