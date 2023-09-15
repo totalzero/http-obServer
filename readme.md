@@ -1,8 +1,8 @@
-obServer - small proxy http server to watching http traffic
+# obServer - small proxy http server to watching http traffic
 note: currently support only http/1.1
 note: currently does not support editing http requests and responses
 
-how to use
+## how to use
 start [port] -> run proxy on port [port]
 example:
 start 1234
